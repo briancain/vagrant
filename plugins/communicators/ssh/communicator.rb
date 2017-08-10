@@ -15,6 +15,8 @@ require 'vagrant/util/keypair'
 require 'vagrant/util/platform'
 require 'vagrant/util/retryable'
 
+#require 'pry'
+
 module VagrantPlugins
   module CommunicatorSSH
     # This class provides communication with the VM via SSH.
@@ -285,6 +287,7 @@ module VagrantPlugins
         scp_connect do |scp|
           if File.directory?(from)
             # Recurisvely upload directories
+            #binding.pry
             scp.upload!(from, to, recursive: true)
           else
             # Open file read only to fix issue [GH-1036]

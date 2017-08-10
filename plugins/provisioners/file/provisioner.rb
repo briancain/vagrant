@@ -5,12 +5,16 @@ module VagrantPlugins
         @machine.communicate.tap do |comm|
           destination = expand_guest_path(config.destination)
 
+          # we need to make sure the actual destination folder
+          # also exists before uploading, otherwise
+          # you will get nested folders
+
           # Make sure the remote path exists
-          command = "mkdir -p %s" % File.dirname(destination)
+          command = "mkdir -p %s" % destination
           comm.execute(command)
 
           # now upload the file
-          comm.upload(File.expand_path(config.source), destination)
+          comm.upload(File.expand_path(config.source), File.dirname(destination))
         end
       end
 
