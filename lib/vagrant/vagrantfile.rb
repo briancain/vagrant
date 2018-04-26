@@ -1,4 +1,5 @@
 require "vagrant/util/template_renderer"
+require 'pry'
 
 module Vagrant
   # This class provides a way to load and access the contents
@@ -125,8 +126,18 @@ module Vagrant
       if provider != nil
         provider_plugin  = Vagrant.plugin("2").manager.providers[provider]
         if !provider_plugin
+          providers  = Vagrant.plugin("2").manager.providers.to_hash.keys
+          if providers
+            providers_str = providers.join(', ')
+          else
+            providers_str = "N/A"
+          end
+
+          # TODO: See if provided provider matches any known providerss
+          #       and if so print a hint
+
           raise Errors::ProviderNotFound,
-            machine: name, provider: provider
+            machine: name, provider: provider, providers: providers_str
         end
 
         provider_cls     = provider_plugin[0]
